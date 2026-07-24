@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body {
+  height: 100%;
+  background: #0a0b12;
+  color: #f5ead6;
+  overscroll-behavior: none;
+}
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-thumb { background: rgba(255,180,84,0.25); border-radius: 8px; }
+
+.glass-panel {
+  background: rgba(18, 20, 31, 0.72);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  border: 1px solid rgba(255, 180, 84, 0.15);
+}
