@@ -10,6 +10,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [resetSent, setResetSent] = useState(false);
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
@@ -23,6 +24,22 @@ export default function LoginPage() {
     }
     router.push('/bus');
     router.refresh();
+  }
+
+  async function handleForgotPassword() {
+    if (!email) {
+      setError('Type your email first, then tap "Forgot password?"');
+      return;
+    }
+    setError(null);
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+    if (error) {
+      setError('Could not send reset email. Try again.');
+    } else {
+      setResetSent(true);
+    }
   }
 
   return (
@@ -63,6 +80,7 @@ export default function LoginPage() {
         />
 
         {error && <p className="mb-4 text-sm text-red-400">{error}</p>}
+        {resetSent && <p className="mb-4 text-sm text-amber-glow">Check your email for a reset link.</p>}
 
         <button
           type="submit"
@@ -70,6 +88,14 @@ export default function LoginPage() {
           className="w-full rounded-lg bg-amber-glow/90 py-2 text-sm font-medium text-night-950 transition hover:bg-amber-glow disabled:opacity-50"
         >
           {loading ? 'Boarding…' : 'Board the bus'}
+        </button>
+
+        <button
+          type="button"
+          onClick={handleForgotPassword}
+          className="mt-3 w-full text-center text-xs text-[#f5ead6]/40 hover:text-amber-glow"
+        >
+          Forgot password?
         </button>
       </form>
     </main>
